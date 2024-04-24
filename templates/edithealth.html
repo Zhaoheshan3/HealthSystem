@@ -1,0 +1,37 @@
+{% extends "basepage.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+<div class="row">
+	<div class="col-12">
+		<div class="card">
+			<div class="card-header">
+				<h5 class="text-center">更改信息</h5>
+			</div>
+			<div class="card-body">
+				<div class="row clearfix">
+					<div class="col-7 m-auto">
+						<form class="form-group"  method="post">
+							{% csrf_token %}
+							<div class="form-group">
+								<label for="">用户名:</label>
+								<input type="text" name="username" id="" class="form-control" value="{{record.personinfo.username}}" readonly>
+							</div>
+							<div class="form-group">
+								<label for="">症状:</label>
+								<input type="text" name="health" id="" class="form-control" value="{{record.health}}" required>
+							</div>
+							<div class="form-group">
+								<label for="">备注:</label>
+								<textarea name="comment" class="form-control" id="" cols="30" rows="5">{{record.comment}}</textarea>
+							</div>
+							<div class="text-right">
+								<button class="btn btn-primary" type="submit">提交</button>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+{% endblock %}

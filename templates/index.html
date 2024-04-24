@@ -1,0 +1,268 @@
+{% extends "basepage.html" %}
+{% block content %}
+
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title mb-0 float-left">可视化展示</h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-12 col-lg-6">
+                        <div class="card flex-fill w-100">
+                            <div class="card-header">
+                                <h5 class="card-title">性别统计分布图</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="chart">
+                                    <div id="chartid1" style="height: 300px; width: 100%;"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-12 col-lg-6">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5 class="card-title">健康与非健康占比图</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="chart">
+                                    <div id="chartid2"  style="height: 300px; width: 100%;"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-12 col-lg-6">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5 class="card-title">性别与健康状况对比图</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="chart chart-sm">
+                                    <div id="chartid3"  style="height: 300px; width: 100%;"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-12 col-lg-6">
+                        <div class="card">
+                            <div class="card-header">
+                                <h5 class="card-title">健康状态分布图</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="chart chart-sm">
+                                    <div id="chartid4"  style="height: 300px; width: 100%;"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block script %}
+<script type="text/javascript">
+    var dom = document.getElementById('chartid1');
+    var myChart = echarts.init(dom, null, {
+        renderer: 'canvas',
+        useDirtyRect: false
+    });
+
+    var option;
+
+    option = {
+        title: {
+            text: '性别统计分布图',
+            left: 'center'
+        },
+        tooltip: {
+            trigger: 'item'
+        },
+        legend: {
+            orient: 'vertical',
+            left: 'left'
+        },
+        series: [
+            {
+                name: '人数',
+                type: 'pie',
+                radius: '50%',
+                data: {{ gender_count_list | safe }},
+                label: {
+                    show: true,
+                    formatter: '{b} ({d}%)'
+                },
+                emphasis: {
+                    itemStyle: {
+                        shadowBlur: 10,
+                        shadowOffsetX: 0,
+                        shadowColor: 'rgba(0, 0, 0, 0.5)'
+                    }
+                }
+            }
+        ]
+    };
+
+    if (option && typeof option === 'object') {
+        myChart.setOption(option);
+    }
+    window.addEventListener('resize', myChart.resize);
+</script>
+
+<script type="text/javascript">
+    var dom2 = document.getElementById('chartid2');
+    var myChart2 = echarts.init(dom2, null, {
+        renderer: 'canvas',
+        useDirtyRect: false
+    });
+    var option2;
+
+    option2 = {
+        title: {
+            text: '健康与非健康占比图',
+            left: 'center'
+        },
+        tooltip: {
+            trigger: 'item'
+        },
+        legend: {
+            orient: 'vertical',
+            left: 'left'
+        },
+        series: [
+            {
+                name: '市场占比',
+                type: 'pie',
+                radius: '50%',
+                data: {{ unhealth_count_list | safe}},
+                label: {
+                    show: true,
+                    formatter: '{b} ({d}%)'
+                },
+
+                emphasis: {
+                    itemStyle: {
+                        shadowBlur: 10,
+                        shadowOffsetX: 0,
+                        shadowColor: 'rgba(0, 0, 0, 0.5)'
+                        
+                    }
+                }
+            }
+        ]
+    };
+
+    if (option2 && typeof option2 === 'object') {
+        myChart2.setOption(option2);
+    }
+    window.addEventListener('resize', myChart2.resize);
+</script>
+
+<script type="text/javascript">
+    var dom3 = document.getElementById('chartid3');
+    var myChart3 = echarts.init(dom3, null, {
+        renderer: 'canvas',
+        useDirtyRect: false
+    });
+    var option3;
+
+    option3 = {
+        title: {
+            text: '性别与健康状况对比图',
+            left: 'center'
+        },
+        tooltip: {
+            trigger: 'item'
+        },
+        legend: {
+            orient: 'vertical',
+            left: 'left'
+        }, 
+        grid: {
+            left: '3%',
+            right: '4%',
+            bottom: '3%',
+            containLabel: true
+        },
+        xAxis: {
+            type: 'category',
+            data: {{ unique_health_values |safe }}
+        },
+        yAxis: {
+            type: 'value'
+        },
+        series: [
+            {
+                data: {{ gender_health_count_male_list | safe }},
+                type: 'bar',
+                name: '男'
+            },
+            {
+                data: {{ gender_health_count_female_list | safe }},
+                type: 'bar',
+                name: '女'
+            }
+        ]
+    };
+    if (option3 && typeof option3 === 'object') {
+        myChart3.setOption(option3);
+    }
+
+    window.addEventListener('resize', myChart.resize);
+</script>
+
+<script type="text/javascript">
+    var dom4 = document.getElementById('chartid4');
+    var myChart4 = echarts.init(dom4, null, {
+        renderer: 'canvas',
+        useDirtyRect: false
+    });
+    var option4;
+
+    option4 = {
+        title: {
+            text: '健康状态分布图',
+            left: 'center'
+        },
+        tooltip: {
+            trigger: 'item'
+        },
+        legend: {
+            orient: 'vertical',
+            left: 'left'
+        },
+        series: [
+            {
+                name: '星级用户',
+                type: 'pie',
+                radius: '50%',
+                data: {{ health_count_list | safe }},
+                label: {
+                    show: true,
+                    formatter: '{b} ({d}%)'
+                },
+                emphasis: {
+                    itemStyle: {
+                        shadowBlur: 10,
+                        shadowOffsetX: 0,
+                        shadowColor: 'rgba(0, 0, 0, 0.5)'
+                    }
+                }
+            }
+        ]
+    };
+
+    if (option4 && typeof option4 === 'object') {
+        myChart4.setOption(option4);
+    }
+    window.addEventListener('resize', myChart2.resize);
+</script>
+
+{% endblock %}
